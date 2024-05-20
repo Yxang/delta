@@ -987,7 +987,8 @@ case class MergeIntoCommand(
       df: DataFrame,
       partitionColumns: Seq[String]): DataFrame = {
     if (partitionColumns.nonEmpty && spark.conf.get(DeltaSQLConf.MERGE_REPARTITION_BEFORE_WRITE)) {
-      df.repartition(partitionColumns.map(col): _*)
+      val repartitionCols = partitionColumns.map(col) :+ rand()
+      df.repartition(repartitionCols: _*)
     } else {
       df
     }
